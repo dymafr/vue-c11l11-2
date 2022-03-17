@@ -9,21 +9,29 @@
       </div>
     </div>
     <div v-for="(field, i) in fields" :key="field.key">
-      <Field :name="`hobbies[${i}].name`" v-slot="{ field, errorMessage }">
-        <input v-bind="field" type="text" />
-        <p>{{ errorMessage }}</p>
-      </Field>
-      <Field :name="`hobbies[${i}].good`" v-slot="{ field }">
-        <div>
-          <input :id="`good[${i}]`" v-bind="field" type="radio" :value="true" />
-          <label :for="`good[${i}]`">Good</label>
-        </div>
-        <div>
-          <input :id="`bad[${i}]`" v-bind="field" type="radio" :value="false" />
-          <label :for="`bad[${i}]`">Bad</label>
-        </div>
-      </Field>
-      <button @click="remove(i)">Supprimer</button>
+      <fieldset
+        class="InputGroup"
+        v-for="(field, idx) in fields"
+        :key="field.key"
+      >
+        <legend>User #{{ idx }}</legend>
+        <label :for="`name_${idx}`">Name</label>
+        <Field :id="`name_${idx}`" :name="`users[${idx}].name`" />
+        <ErrorMessage :name="`users[${idx}].name`" />
+
+        <label :for="`email_${idx}`">Email</label>
+        <Field
+          :id="`email_${idx}`"
+          :name="`users[${idx}].email`"
+          type="email"
+        />
+        <ErrorMessage :name="`users[${idx}].email`" />
+        <button type="button" @click="remove(idx)">X</button>
+      </fieldset>
+
+      <button type="button" @click="push({ email: '', name: '' })">
+        Add User +
+      </button>
       <br />
       <br />
     </div>
