@@ -1,6 +1,6 @@
 <template>
   <form>
-    <div v-for="(field, i) in fields" :key="field.key">
+    <div>
       <fieldset
         class="InputGroup"
         v-for="(field, idx) in fields"
