@@ -1,13 +1,5 @@
 <template>
   <form>
-    <div>
-      <label>Activités</label>
-      <div>
-        <button @click="push({ name: '', good: false })" type="button">
-          Ajouter une activité
-        </button>
-      </div>
-    </div>
     <div v-for="(field, i) in fields" :key="field.key">
       <fieldset
         class="InputGroup"
@@ -15,7 +7,7 @@
         :key="field.key"
       >
         <legend>User #{{ idx }}</legend>
-        <label :for="`name_${idx}`">Name</label>
+        <label :for="`name_${idx}`">Prénom</label>
         <Field :id="`name_${idx}`" :name="`users[${idx}].name`" />
         <ErrorMessage :name="`users[${idx}].name`" />
 
@@ -46,21 +38,73 @@ import { toFormValidator } from '@vee-validate/zod';
 
 const validationSchema = toFormValidator(
   z.object({
-    hobbies: z
+    users: z
       .array(
         z.object({
-          name: z
-            .string({ required_error: 'obligatoire' })
-            .min(5, { message: 'trop court !' }),
-          comment: z.string(),
+          name: z.string({ required_error: 'obligatoire' }),
+          email: z.string().email(),
         })
       )
       .optional(),
   })
 );
 
-const { values } = useForm({ validationSchema });
-const { fields, push, remove } = useFieldArray('hobbies');
+const { values } = useForm({
+  validationSchema,
+  initialValues: {
+    users: [{ name: '', email: '' }],
+  },
+});
+const { fields, push, remove } = useFieldArray('users');
 </script>
 
-<style scoped lang="scss"></style>
+<style>
+#app {
+  font-family: Arial, Helvetica, sans-serif;
+  max-width: 500px;
+}
+
+input {
+  display: block;
+}
+
+span {
+  display: block;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 20px;
+}
+
+button {
+  display: block;
+}
+
+button[type='submit'] {
+  margin-top: 10px;
+}
+
+form {
+  padding: 20px;
+  border: 1px solid black;
+}
+
+form + form {
+  margin-top: 20px;
+}
+
+.InputGroup {
+  padding: 10px;
+  border: 2px dotted black;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.InputGroup button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+</style>
