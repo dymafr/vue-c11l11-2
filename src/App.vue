@@ -20,13 +20,14 @@
         <ErrorMessage :name="`users[${idx}].email`" />
         <button type="button" @click="remove(idx)">X</button>
       </fieldset>
-
-      <button type="button" @click="push({ email: '', name: '' })">
-        Add User +
-      </button>
-      <br />
-      <br />
     </div>
+
+    <button type="button" @click="push({ email: '', name: '' })">
+      Add User +
+    </button>
+    <br />
+    <br />
+
     <pre>{{ values }}</pre>
   </form>
 </template>
@@ -38,14 +39,12 @@ import { toFormValidator } from '@vee-validate/zod';
 
 const validationSchema = toFormValidator(
   z.object({
-    users: z
-      .array(
-        z.object({
-          name: z.string({ required_error: 'obligatoire' }),
-          email: z.string().email(),
-        })
-      )
-      .optional(),
+    users: z.array(
+      z.object({
+        name: z.string({ required_error: 'obligatoire' }).min(1),
+        email: z.string().email(),
+      })
+    ),
   })
 );
 
